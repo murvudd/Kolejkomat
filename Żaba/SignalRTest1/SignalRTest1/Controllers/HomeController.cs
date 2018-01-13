@@ -26,5 +26,11 @@ namespace SignalRTest1.Controllers
 
             return View();
         }
+
+        public ActionResult Chat()
+        {
+            return View();
+        }
+
     }
 }
