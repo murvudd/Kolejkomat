@@ -1,0 +1,42 @@
+﻿@model WebApplication1.Models.Case
+
+<p>Add event</p>
+@using (Html.BeginForm("Submit", "test1FormController", FormMethod.Post))
+{<form>
+    <p>
+        <table style="width:100%">
+            
+            <tr>
+                <th>Name</th>
+                <th>Year</th>
+                <th>Type</th>
+                <th>Country</th>
+                <th>Area</th>
+                <th>Activity</th>
+                <th>Sex</th>
+                <th>Fatal</th>
+            </tr>
+            
+            <tr>
+
+                
+                <td>@Html.TextBoxFor(objCase => objCase.Name)</td>
+                <td>@Html.TextBoxFor(objCase => objCase.Year)</td>
+                <td>@Html.TextBoxFor(objCase => objCase.Type)</td>
+                <td>@Html.TextBoxFor(objCase => objCase.Country)</td>
+                <td>@Html.TextBoxFor(objCase => objCase.Area)</td>
+                <td>@Html.TextBoxFor(objCase => objCase.Activity)</td>
+                <td>@Html.TextBoxFor(objCase => objCase.Sex)</td>
+                <td>@Html.TextBoxFor(objCase => objCase.Fatal)</td>
+            </tr>
+            <tr>
+                <td><input type="submit" id="submitID" value="Add!"></td>
+            </tr>
+                
+            
+        </table>
+        </p>
+ </form>
+ }
+
+  
