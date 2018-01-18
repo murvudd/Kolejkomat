@@ -1,0 +1,7 @@
+c:\users\rlesz\source\repos\CQRS1\bin\Debug\CQRS1.exe.config
+c:\users\rlesz\source\repos\CQRS1\bin\Debug\CQRS1.exe
+c:\users\rlesz\source\repos\CQRS1\bin\Debug\CQRS1.pdb
+c:\users\rlesz\source\repos\CQRS1\obj\Debug\CQRS1.csprojResolveAssemblyReference.cache
+c:\users\rlesz\source\repos\CQRS1\obj\Debug\CQRS1.csproj.CoreCompileInputs.cache
+c:\users\rlesz\source\repos\CQRS1\obj\Debug\CQRS1.exe
+c:\users\rlesz\source\repos\CQRS1\obj\Debug\CQRS1.pdb
