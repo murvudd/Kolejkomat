@@ -24,6 +24,7 @@ namespace WebAPI
         public string Mail { get; set; }
         public Guid Id {get; set;}
         public string Password { get; set; }
+        public string ConfirmPasswort { get; set; }
         public int Privileges { get; set; }
 
         public Person()

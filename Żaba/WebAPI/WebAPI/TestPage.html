@@ -58,9 +58,9 @@
     </script>-->
     <script type="text/javascript">
         $(function () {
-            //client side    definicja funkcji wywoływanej przez server
+            //client side    definicja funkcji odebranej przez clienta,  wywoływanej przez server
             var chat = $.connection.testHub;
-            chat.client.helloChat = function (text) {
+            chat.client.hello = function (text) {
                 prompt('Hello!!!', 'text');
             }
 
@@ -68,7 +68,7 @@
             // server side ???     wywoływanie funkcji na serverze
             $.connection.hub.start().done(function () {
                 $('#sendmessage').click(function () {
-                    chat.server.helloServer();
+                    chat.server.hello();
                 });
             });
 

@@ -8,35 +8,68 @@ namespace WebAPI
 {
     public class TestHub : Hub
     {
-        public void LogIn(string mail, string password)
+        public void LogIn(string mail, string password, string confirmpass)
         {
-            Clients.Caller.loggedIn();
+            if (true)
+            {
+                //TODO check & Login
+                Clients.Caller.loggedIn();
+            }
+
         }
 
-        public void SignIn(string mail, string password, string firstName, string lastName)
+        public void SignIn(string mail, string password, string confirmpass, string firstName, string lastName)
         {
+            Person a = new Person()
+            {
+                Mail = mail,
+                Password = password,
+                ConfirmPassword = confirmpass,
+                FirstName = firstName,
+                LastName = lastName,
+                Privileges = 0
+
+            };
+
+            //TODO metoda która przeniesie te dane do DB
             Clients.Caller.accountCreated();
         }
 
         public void RequestNewQueuePosition(Person a, DateTime date, string issue)
         {
-            PositionInQueue position = new PositionInQueue() {
+            PositionInQueue position = new PositionInQueue()
+            {
+                //TODO if logged in ?
                 Id = a.Id,
                 Date = date,
                 Issue = issue,
                 //TODO  Pos = wziac z bazy
             };
-            Clients.All.updateQueue();            
+            Clients.All.updateQueue();
+
+
         }
 
-        public void UpdateQueue()
+        public void UpdateQueueAll()
         {
-            Clients.Caller.updateQueue();
+            Clients.All.updateQueue();
         }
 
-        public void HelloServer() // funkcja wywoływana przez clienta na serverze
+        public void UpdateQueue(Guid id)
         {
-            Clients.Caller.helloChat(); //funkcja wywyoływana przez server na clientcie
+            List<PositionInQueue> queue = new List<PositionInQueue>(); // to bdzie w DB ?
+            var date = (from w in queue
+                        where w.Id == id
+                        select w.Date);
+            var position = (from w in queue
+                            where w.Id == id
+                            select w.Pos);
+            Clients.Caller.updateQueue(date, position); 
+        }
+
+        public void Hello() // funkcja wywoływana przez clienta na serverze
+        {
+            Clients.Others.hello(); //funkcja wywyoływana przez server na clientcie
         }
     }
 }
