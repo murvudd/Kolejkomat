@@ -20,19 +20,17 @@ namespace Server
             // See http://msdn.microsoft.com/en-us/library/system.net.httplistener.aspx 
             // for more information.
             //string url = "http://192.168.0.127:8080";
-            string url = "http://localhost:8080";
+            string url = "http://*:8080";
             try
             {
                 using (WebApp.Start(url))
                 {
                     Console.WriteLine("Server running on local: {0}", url);
-                    Console.WriteLine("Server running on factul: {0}", GetIPAddress());
-
+                    foreach (var item in GetIPAddressArray())
+                    {
+                        Console.WriteLine("Server running on factual: {0}", item);
+                    }
                 }
-
-
-
-
 
                 Console.ReadLine();
             }
@@ -67,7 +65,7 @@ namespace Server
         {
             IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName()); // `Dns.Resolve()` method is deprecated.
             IPAddress ipAddress = ipHostInfo.AddressList[i];
-            
+
 
             return ipAddress.ToString();
         }

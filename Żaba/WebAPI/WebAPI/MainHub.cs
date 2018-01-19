@@ -16,7 +16,7 @@ namespace WebAPI
         public void Hello()
         {
             Clients.All.hello();
-            Clients.
+            //Clients.
         }
     }
 }

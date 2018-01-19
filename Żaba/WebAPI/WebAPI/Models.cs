@@ -28,7 +28,8 @@ namespace WebAPI
 
         public Person()
         {
-            
+            Id = Guid.NewGuid();
+
         }
 
         
@@ -47,7 +48,7 @@ namespace WebAPI
         public DateTime Date { get; set; }
         public string Issue { get; set; }
         public Guid Id { get; set; }
-        public PositionInQueue()
+        public PositionInQueue() 
         {
 
         }
@@ -73,54 +74,54 @@ namespace WebAPI
 
     }
 
-    public class Position
-    {
-        private int _a { get; set; }
-        private int A
-        {
-            get { return _a; }
-            set
-            {
-                _a = _a + 1;
-                if (_a == 1000) { _a = 1; }
-            }
-        }
-        private int _b { get; set; }
-        private int B
-        {
-            get { return _b; }
-            set
-            {
-                if (_b == 1000) { _b = 1; }
-                _b += 1;
-            }
-        }
-        private int _c { get; set; }
-        private int C
-        {
-            get { return _c; }
-            set
-            {
-                if (_c == 1000) { _c = 1; }
-                _c += 1;
-            }
-        }
+    //public class Position
+    //{
+    //    private int _a { get; set; }
+    //    private int A
+    //    {
+    //        get { return _a; }
+    //        set
+    //        {
+    //            _a = _a + 1;
+    //            if (_a == 1000) { _a = 1; }
+    //        }
+    //    }
+    //    private int _b { get; set; }
+    //    private int B
+    //    {
+    //        get { return _b; }
+    //        set
+    //        {
+    //            if (_b == 1000) { _b = 1; }
+    //            _b += 1;
+    //        }
+    //    }
+    //    private int _c { get; set; }
+    //    private int C
+    //    {
+    //        get { return _c; }
+    //        set
+    //        {
+    //            if (_c == 1000) { _c = 1; }
+    //            _c += 1;
+    //        }
+    //    }
 
-        public string Case
-        {
-            get { return Case; }
-            set
-            {
-                if (value == nameof(A)) { A = 10; Case = value; }
-                if (value == nameof(B)) { B = 10; Case = value; }
-                if (value == nameof(C)) { C = 10; Case = value; }
-            }
-        }
+    //    public string Case
+    //    {
+    //        get { return Case; }
+    //        set
+    //        {
+    //            if (value == nameof(A)) { A = 10; Case = value; }
+    //            if (value == nameof(B)) { B = 10; Case = value; }
+    //            if (value == nameof(C)) { C = 10; Case = value; }
+    //        }
+    //    }
 
-        public Position(string str)
-        {
-            Case = str;
-        }
+    //    public Position(string str)
+    //    {
+    //        Case = str;
+    //    }
 
-    }
+    //}
 }
