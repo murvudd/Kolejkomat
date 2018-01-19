@@ -15,4 +15,13 @@ namespace WebAPI
             app.MapSignalR();
         }
     }
+
+    public class Methods
+    {
+        public static int Metoda()
+        {
+            int i = 5;
+            return i -= 1;
+        }
+    }
 }

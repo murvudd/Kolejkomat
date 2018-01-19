@@ -8,29 +8,25 @@ namespace WebAPI
 {
     public class TestHub : Hub
     {
-        public void LogIn(string mail, string password, string confirmpass)
+        public void LogIn(string mail, string password)
         {
             if (true)
             {
                 //TODO check & Login
                 Clients.Caller.loggedIn();
             }
-
         }
 
-        public void SignIn(string mail, string password, string confirmpass, string firstName, string lastName)
+        public void SignIn(string mail, string password, string firstName, string lastName)
         {
             Person a = new Person()
             {
                 Mail = mail,
                 Password = password,
-                ConfirmPassword = confirmpass,
                 FirstName = firstName,
                 LastName = lastName,
                 Privileges = 0
-
             };
-
             //TODO metoda która przeniesie te dane do DB
             Clients.Caller.accountCreated();
         }
@@ -45,7 +41,7 @@ namespace WebAPI
                 Issue = issue,
                 //TODO  Pos = wziac z bazy
             };
-            Clients.All.updateQueue();
+            Clients.All.commandUpdateQueue();
 
 
         }
@@ -57,18 +53,20 @@ namespace WebAPI
 
         public void UpdateQueue(Guid id)
         {
-            List<PositionInQueue> queue = new List<PositionInQueue>(); // to bdzie w DB ?
+            //using ( <T> context = new <T>)
+            List<PositionInQueue> queue = new List<PositionInQueue>(); // przerobić na pobieranie z EF 
             var date = (from w in queue
                         where w.Id == id
                         select w.Date);
             var position = (from w in queue
                             where w.Id == id
-                            select w.Pos);
-            Clients.Caller.updateQueue(date, position); 
+                            select w.Position);
+            Clients.Caller.updateQueue(date, position);
         }
 
         public void Hello() // funkcja wywoływana przez clienta na serverze
         {
+            int j = Methods.Metoda();
             Clients.Others.hello(); //funkcja wywyoływana przez server na clientcie
         }
     }

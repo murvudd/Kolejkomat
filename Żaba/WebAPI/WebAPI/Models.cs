@@ -22,9 +22,9 @@ namespace WebAPI
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Mail { get; set; }
-        public Guid Id {get; set;}
+        public Guid Id { get; set; }
         public string Password { get; set; }
-        public string ConfirmPasswort { get; set; }
+
         public int Privileges { get; set; }
 
         public Person()
@@ -33,7 +33,7 @@ namespace WebAPI
 
         }
 
-        
+
         //protected Person(Person other)
         //{
         //    this._id = other._id;
@@ -45,11 +45,18 @@ namespace WebAPI
 
     public class PositionInQueue : IGuid
     {
-        public int Pos { get; set; }
+        private int _pos { get; set; }
+        public int Position
+        {
+            get { return _pos; }
+
+            set { _pos = value % 999; }
+
+        }
         public DateTime Date { get; set; }
         public string Issue { get; set; }
         public Guid Id { get; set; }
-        public PositionInQueue() 
+        public PositionInQueue()
         {
 
         }
