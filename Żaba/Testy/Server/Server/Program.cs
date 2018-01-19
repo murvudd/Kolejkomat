@@ -7,6 +7,7 @@ using Microsoft.AspNet.SignalR;
 using Microsoft.Owin.Hosting;
 using Owin;
 using Microsoft.Owin.Cors;
+using System.Net;
 
 namespace Server
 {
@@ -18,21 +19,68 @@ namespace Server
             // use http://*:8080 to bind to all addresses. 
             // See http://msdn.microsoft.com/en-us/library/system.net.httplistener.aspx 
             // for more information.
-            string url = "http://192.168.0.127:8080";
-            //string url = "http://localhost:8080";
+            //string url = "http://192.168.0.127:8080";
+            string url = "http://localhost:8080";
             try
             {
                 using (WebApp.Start(url))
                 {
-                    Console.WriteLine("Server running on {0}", url);
-                    Console.ReadLine();
+                    Console.WriteLine("Server running on local: {0}", url);
+                    Console.WriteLine("Server running on factul: {0}", GetIPAddress());
+
                 }
+
+
+
+
+
+                Console.ReadLine();
             }
+
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 Console.ReadKey();
             }
+        }
+
+
+
+        static public string[] GetIPAddressArray()
+        {
+            IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName()); // `Dns.Resolve()` method is deprecated.
+                                                                          //IPAddress ipAddress = ipHostInfo.AddressList[0];
+            int k = ipHostInfo.AddressList.Length;
+            string[] strk = new string[k];
+
+            for (int i = 0; i < k; i++)
+            {
+                strk[i] = Convert.ToString(ipHostInfo.AddressList[i]);
+            }
+
+            return strk;
+        }
+
+
+
+        static public string GetIPAddress(int i)
+        {
+            IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName()); // `Dns.Resolve()` method is deprecated.
+            IPAddress ipAddress = ipHostInfo.AddressList[i];
+            
+
+            return ipAddress.ToString();
+        }
+
+
+        //this gets the ip address of the server pc
+        static public string GetIPAddress()
+        {
+            IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName()); // `Dns.Resolve()` method is deprecated.
+
+            IPAddress ipAddress = ipHostInfo.AddressList[0];
+
+            return ipAddress.ToString();
         }
     }
     class Startup
