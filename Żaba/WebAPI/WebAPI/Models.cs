@@ -6,6 +6,16 @@ using System.Web;
 
 namespace WebAPI
 {
+
+    public enum Privileges
+    {
+        User = 0,
+        PrivilagedUser = 1,
+        Admin = 2
+    }
+
+
+
     public interface IGuid
     {
         Guid Id { get; }
@@ -25,7 +35,7 @@ namespace WebAPI
         public Guid Id { get; set; }
         public string Password { get; set; }
 
-        public int Privileges { get; set; }
+        public Privileges Privileges { get; set; }
 
         public Person()
         {

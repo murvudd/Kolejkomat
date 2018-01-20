@@ -31,6 +31,11 @@ namespace WebAPI
             Clients.Caller.accountCreated();
         }
 
+        public void RequestTimeEstimation()
+        {
+
+        }
+
         public void RequestNewQueuePosition(Person a, DateTime date, string issue)
         {
             PositionInQueue position = new PositionInQueue()
