@@ -16,6 +16,10 @@ namespace WebAPI
                 Clients.Caller.loggedIn();
             }
         }
+            
+
+
+
 
         public void SignIn(string mail, string password, string firstName, string lastName)
         {
