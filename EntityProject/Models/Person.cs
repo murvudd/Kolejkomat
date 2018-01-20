@@ -12,13 +12,16 @@ namespace EntityProject.Models
         Admin, User, PrivilagedUser
     }
 
-
+    public interface IGuid
+    {
+        Guid ID { get; }
+    }
     [Table("Person")]
-    public class Person
+    public class Person :IGuid
     {
 
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public string FirstName { get; set; }
 
