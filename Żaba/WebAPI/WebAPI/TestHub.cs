@@ -59,6 +59,7 @@ namespace WebAPI
         public void UpdateQueue(Guid id)
         {
             //using ( <T> context = new <T>)
+            Context.
             List<PositionInQueue> queue = new List<PositionInQueue>(); // przerobić na pobieranie z EF 
             var date = (from w in queue
                         where w.Id == id
