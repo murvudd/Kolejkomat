@@ -20,26 +20,24 @@ namespace Server
             // See http://msdn.microsoft.com/en-us/library/system.net.httplistener.aspx 
             // for more information.
             //string url = "http://192.168.0.127:8080";
-            string url = "http://*:8080";
-            try
-            {
+            string url = "http://localhost:8080";
+            
                 using (WebApp.Start(url))
                 {
                     Console.WriteLine("Server running on local: {0}", url);
-                    foreach (var item in GetIPAddressArray())
-                    {
-                        Console.WriteLine("Server running on factual: {0}", item);
-                    }
+                foreach (var item in GetIPAddressArray())
+                {
+                    Console.WriteLine("Server running on factual: {0}", item);
                 }
-
-                Console.ReadLine();
             }
 
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
+            Console.ReadLine();
+
+
+
+            //Console.WriteLine(e);
                 Console.ReadKey();
-            }
+            
         }
 
 
