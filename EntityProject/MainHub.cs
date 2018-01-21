@@ -35,47 +35,31 @@ namespace EntityProject
             Clients.Caller.accountCreated();
         }
 
-        public string CheckTimesEstimation()
+        public void EstimateTime(Guid Id)
         {
-            
-            string a = "1";
-            return a;
-        }
-
-        public void RequestTimeEstimation(Guid Id)
-        {
+            int ESTIMATETIMEFORPERSON = 10;
+            string estimateTime;
 
             using (var context = new DataContext())
             {
+                var user = context.Persons.SingleOrDefault(b => b.Id == Id);
 
-                TimeSpan timeoffset = new TimeSpan(0,10,0);
-                var count = context.PositionInQueues.Count(t => t.Pos != 0);                
-                var reqClient= context.Persons.SingleOrDefault(b => b.Id == Id);
-                if (reqClient != null)
-                {
-                    
-                    var positionId = reqClient.PositionInQueuePos.GetValueOrDefault();
+                var queue = context.PositionInQueues.SingleOrDefault(c => c.Pos == user.PositionInQueuePos);
 
-                    var howManyPeople = (from p in context.PositionInQueues
-                                         where p.Pos == positionId 
-                                         select p.Date);
-                }
-                    
-               // var date = context.PositionInQueues.Count(v => v.Date <= DateTime.Now);
-              //  foreach()
-                Clients.Caller.timeEstimation(  );
+                var queue2 = context.PositionInQueues.Where(c => c.Date < queue.Date);
+
+                var queue3 = queue2.Count();
+
+                estimateTime = DateTime.Now.AddMinutes(queue3 * ESTIMATETIMEFORPERSON).ToString("HH:mm");
             }
-
+            Clients.Caller.timeEstimattion(estimateTime);
         }
 
-        public void EnterQueue(Guid Id, string issue)
+        public void AddUserToQueue(Guid Id, string issue)
         {
-            CheckTimesEstimation();
-            
-
-
             using (var context = new DataContext())
             {
+
                 var entryq = new PositionInQueue { Date = DateTime.Now, Issue = issue };
                 context.PositionInQueues.Add(entryq);
                 context.SaveChanges();
@@ -84,34 +68,109 @@ namespace EntityProject
                 if (result != null)
                 {
                     result.PositionInQueuePos = entryq.Pos;
+
+                    context.SaveChanges();
+                }
+
+                Clients.Caller.userAdded();
+                Clients.Others.newUseradded();
+            }
+        }
+
+        public void DeleteUserFromQueue(Guid Id)
+        {
+            using (var context = new DataContext())
+            {
+                var UserIdInQueue = context.Persons.SingleOrDefault(b => b.Id == Id);
+                var itemToRemove = context.PositionInQueues.SingleOrDefault(x => x.Pos == UserIdInQueue.PositionInQueuePos);
+
+                if (itemToRemove != null)
+                {
+                    context.PositionInQueues.Remove(itemToRemove);
+
                     context.SaveChanges();
                 }
             }
-            Clients.All.commandUpdateQueue();
-
+            Clients.Caller.removedFromQueue();
         }
 
+        //public string CheckTimesEstimation()
+        //{
+
+        //    string a = "1";
+        //    return a;
+        //}
+
+        //public void RequestTimeEstimation(Guid Id)
+        //{
+
+        //    using (var context = new DataContext())
+        //    {
+
+        //        TimeSpan timeoffset = new TimeSpan(0,10,0);
+        //        var count = context.PositionInQueues.Count(t => t.Pos != 0);                
+        //        var reqClient= context.Persons.SingleOrDefault(b => b.Id == Id);
+        //        if (reqClient != null)
+        //        {
+
+        //            var positionId = reqClient.PositionInQueuePos.GetValueOrDefault();
+
+        //            var howManyPeople = (from p in context.PositionInQueues
+        //                                 where p.Pos == positionId 
+        //                                 select p.Date);
+        //        }
+
+        //       // var date = context.PositionInQueues.Count(v => v.Date <= DateTime.Now);
+        //      //  foreach()
+        //        Clients.Caller.timeEstimation(  );
+        //    }
+
+        //}
+
+        //public void EnterQueue(Guid Id, string issue)
+        //{
+        //    CheckTimesEstimation();
 
 
 
-        public void UpdateQueue(Guid id)
-        {
-            ////using ( <T> context = new <T>)
-            ////Context.
-            //using (var context = new DataContext())
-            //{
-            //    //date.now 
-            //    //List<PositionInQueue> queue = new List<PositionInQueue>(); // przerobić na pobieranie z EF 
-            //    context.Database.
-            //var date = (from w in queue
-            //            where w.pos == id
-            //            select w.Date);
-            //    var position = (from w in queue
-            //                    where w.Pos == id
-            //                    select w.Position);
-            //    Clients.Caller.updateQueue(date, position);
-            //}
-        }
+        //    using (var context = new DataContext())
+        //    {
+        //        var entryq = new PositionInQueue { Date = DateTime.Now, Issue = issue };
+        //        context.PositionInQueues.Add(entryq);
+        //        context.SaveChanges();
+
+        //        var result = context.Persons.SingleOrDefault(b => b.Id == Id);
+        //        if (result != null)
+        //        {
+        //            result.PositionInQueuePos = entryq.Pos;
+        //            context.SaveChanges();
+        //        }
+        //    }
+        //    Clients.All.commandUpdateQueue();
+
+        //}
+
+
+
+
+        //public void UpdateQueue(Guid id)
+        //{
+        //    ////using ( <T> context = new <T>)
+        //    ////Context.
+        //    //using (var context = new DataContext())
+        //    //{
+        //    //    //date.now 
+        //    //    //List<PositionInQueue> queue = new List<PositionInQueue>(); // przerobić na pobieranie z EF 
+        //    //    context.Database.
+        //    //var date = (from w in queue
+        //    //            where w.pos == id
+        //    //            select w.Date);
+        //    //    var position = (from w in queue
+        //    //                    where w.Pos == id
+        //    //                    select w.Position);
+        //    //    Clients.Caller.updateQueue(date, position);
+        //    //}
+        //}
 
         public void Hello() // funkcja wywoływana przez clienta na serverze
         {
