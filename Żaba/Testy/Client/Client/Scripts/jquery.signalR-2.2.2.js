@@ -9,7 +9,7 @@
  *
  */
 
-/// <reference path="jquery-3.2.1.js" />
+/// <reference path="jquery-3.3.1.js" />
 /// <reference path="jquery.signalR-2.2.2.min.js" />
 (function ($, window, undefined) {
 

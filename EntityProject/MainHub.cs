@@ -5,9 +5,11 @@ using System.Web;
 using Microsoft.AspNet.SignalR;
 using EntityProject.Models;
 using EntityProject.DAL;
+using Microsoft.AspNet.SignalR.Hubs;
 
 namespace EntityProject
 {
+    [HubName("mainHub")]
     public class MainHub : Hub
     {
 
@@ -175,7 +177,14 @@ namespace EntityProject
         public void Hello() // funkcja wywoływana przez clienta na serverze
         {
 
-            Clients.All.hello(); //funkcja wywyoływana przez server na clientcie
+            //Clients.All.hello(); //funkcja wywyoływana przez server na clientcie
+            Clients.All.addNewMessageToPage("Sys_admin_zaba", "Hello_dave");
         }
+        public void Send(string name, string message)
+        {
+            // Call the addNewMessageToPage method to update clients.
+            Clients.All.addNewMessageToPage(name, message);
+        }
+        
     }
 }
