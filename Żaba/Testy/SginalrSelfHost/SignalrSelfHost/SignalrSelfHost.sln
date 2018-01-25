@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelfHost.ConsoleServer", "SelfHost.ConsoleServer.csproj", "{59001B4D-4153-4030-9291-ED196902733A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SelfHost.Server", "SelfHost.Server", "{942F3CD1-FF30-44F1-912A-F37665A4B4E3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SelfHost.Client", "SelfHost.Client", "{1923909B-F6CF-4ED1-AFC7-C98BECD966E5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{59001B4D-4153-4030-9291-ED196902733A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59001B4D-4153-4030-9291-ED196902733A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59001B4D-4153-4030-9291-ED196902733A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59001B4D-4153-4030-9291-ED196902733A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{59001B4D-4153-4030-9291-ED196902733A} = {942F3CD1-FF30-44F1-912A-F37665A4B4E3}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1F08F9BD-EC96-4D46-8487-9C55FD0374FC}
+	EndGlobalSection
+EndGlobal

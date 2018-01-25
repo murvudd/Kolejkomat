@@ -6,6 +6,10 @@ using Microsoft.Owin;
 using Owin;
 using System.Net;
 
+using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
+
+
 
 [assembly: OwinStartup(typeof(EntityProject.Startup))]
 namespace EntityProject
@@ -14,7 +18,10 @@ namespace EntityProject
     {
         public void Configuration(IAppBuilder app)
         {
-            app.MapSignalR();
+            var config = new HubConfiguration();
+            config.EnableJSONP = true;
+            app.MapSignalR(config); 
+            //app.MapSignalR();
         }
 
         public void GetMyIpAddress()
