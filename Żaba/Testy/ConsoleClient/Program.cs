@@ -52,7 +52,7 @@ namespace ConsoleClient
             //{
             //    Console.WriteLine(param);
             //});
-            myHub.Invoke<string>("signIn", "mail", "Password", "Klejnot", "Nilu").Wait();
+            myHub.Invoke<string>("SignIn", "mail", "Password", "Klejnot", "Nilu").Wait();
 
             myHub.On<string>("accountCreated", param =>
             {
