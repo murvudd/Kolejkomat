@@ -1,8 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\EntityProject"
+    "\\Żaba",
+    "\\Żaba\\ConsoleClient",
+    "\\Żaba\\ConsoleClient\\ConsoleClient"
   ],
-  "SelectedNode": "\\EntityProject\\EntityProject.sln",
+  "SelectedNode": "\\Żaba\\ConsoleClient",
   "PreviewInSolutionExplorer": false
 }
