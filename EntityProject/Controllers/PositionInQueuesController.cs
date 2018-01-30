@@ -13,6 +13,7 @@ namespace EntityProject.Controllers
 {
     public class PositionInQueuesController : Controller
     {
+
         private DataContext db = new DataContext();
 
         // GET: PositionInQueues
@@ -113,6 +114,7 @@ namespace EntityProject.Controllers
             PositionInQueue positionInQueue = db.PositionInQueues.Find(id);
             db.PositionInQueues.Remove(positionInQueue);
             db.SaveChanges();
+            
             return RedirectToAction("Index");
         }
 

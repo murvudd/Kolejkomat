@@ -14,26 +14,59 @@ namespace EntityProject
 
         public void LogIn(string mail, string password)
         {
-            if (true)
+            bool f;
+            using (DataContext db = new DataContext())
             {
-                //TODO check & Login
-                Clients.Caller.loggedIn();
+
+                var osoba = db.Persons.SingleOrDefault(a => a.Mail == mail && a.Password == password);
+                if (osoba != null)
+                {
+                    f = true;
+                    Clients.Caller.loggedIn(f, osoba.Id);
+                }
+                else
+                {
+                    f = false;
+                    Clients.Caller.loginError(f, osoba.Id); // tu jak osoba będzie nullem to nie wiem czy się nie wysypie
+                    // sprawdzę to
+                }
             }
         }
 
         public void SignIn(string mail, string password, string firstName, string lastName)
         {
-            Person a = new Person()
+
+            using (DataContext db = new DataContext())
             {
-                Mail = mail,
-                Password = password,
-                FirstName = firstName,
-                LastName = lastName,
-                Privileges = 0
-            };
-            //TODO metoda która przeniesie te dane do DB
-            Clients.Caller.accountCreated();
+                bool f;
+                var result = db.Persons.SingleOrDefault(a => a.Mail == mail);
+                if (result == null)
+                {
+                    Person osoba = new Person()
+                    {
+                        Id = Guid.NewGuid(),
+                        Mail = mail,
+                        Password = password,
+                        FirstName = firstName,
+                        LastName = lastName,
+                        Privileges = 0,
+                        PositionInQueuePos = null
+                    };
+
+                    db.Persons.Add(osoba);
+                    db.SaveChanges();
+                    f = true;
+                    Clients.Caller.accountCreated(f);
+                }
+                else
+                {
+                    f = false;
+                    Clients.Caller.accountCreated(f);
+                }
+            }
         }
+
+
 
         public void EstimateTime(Guid Id)
         {
@@ -46,11 +79,13 @@ namespace EntityProject
 
                 var queue = context.PositionInQueues.SingleOrDefault(c => c.Pos == user.PositionInQueuePos);
 
-                var queue2 = context.PositionInQueues.Where(c => c.Date < queue.Date);
+                var queue2 = context.PositionInQueues.Where(c => c.Date < queue.Date).Count();
 
-                var queue3 = queue2.Count();
+                //var queue2 = context.PositionInQueues.Where(c => c.Date < queue.Date);
 
-                estimateTime = DateTime.Now.AddMinutes(queue3 * ESTIMATETIMEFORPERSON).ToString("HH:mm");
+                //var queue3 = queue2.Count();
+
+                estimateTime = DateTime.Now.AddMinutes(queue2 * ESTIMATETIMEFORPERSON).ToString("HH:mm");
             }
             Clients.Caller.timeEstimattion(estimateTime);
         }
@@ -92,6 +127,12 @@ namespace EntityProject
                 }
             }
             Clients.Caller.removedFromQueue();
+        }
+
+        public void SendQueue()
+        {
+
+            Clients.All.updateQueue();
         }
 
         //public string CheckTimesEstimation()

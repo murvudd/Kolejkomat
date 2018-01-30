@@ -13,8 +13,8 @@ namespace EntityProject
 
             bundles.Add(new ScriptBundle("~/bundles/signalr-2.2.2").Include(
                         "~/Scripts/jquery.signalR-2.2.2.js"));
-            bundles.Add(new ScriptBundle("~/bundles/signalr").Include(
-                        "~/Scripts/jquery.signalR-{version}.js"));
+            //bundles.Add(new ScriptBundle("~/bundles/signalr").Include(
+            //            "~/Scripts/jquery.signalR-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));

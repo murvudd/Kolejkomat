@@ -49,7 +49,7 @@ namespace EntityProject.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,FirstName,LastName,Mail,Password,Privileges,PositionInQueuePos")] Person person)
+        public ActionResult Create([Bind(Include = "Id,FirstName,LastName,Mail,Password,Privileges,PositionInQueuePos=null")] Person person)
         {
             if (ModelState.IsValid)
             {

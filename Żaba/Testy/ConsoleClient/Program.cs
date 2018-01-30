@@ -15,7 +15,7 @@ namespace ConsoleClient
         {
 
             //Set connection
-            var connection = new HubConnection("http://kolejkomatapp2.azurewebsites.net/signalr/hubs");
+            var connection = new HubConnection("http://kolejkomatv1.azurewebsites.net/signalr/hubs");
             //Make proxy to hub based on hub name on server
             var myHub = connection.CreateHubProxy("mainHub");
             //Start connection
@@ -34,8 +34,9 @@ namespace ConsoleClient
 
             }).Wait();
 
-
-            myHub.Invoke<string>("logIn", new string[] { "login ", "mail" }).ContinueWith(task =>
+            
+            
+            myHub.Invoke<string>("hello", "Wiadomość :   " + DateTime.UtcNow).ContinueWith(task =>
             {
                 if (task.IsFaulted)
                 {
@@ -48,20 +49,57 @@ namespace ConsoleClient
                 }
             });
 
-            //myHub.On<string>("addNewMessageToPage", param =>
-            //{
-            //    Console.WriteLine(param);
-            //});
-            myHub.Invoke<string>("SignIn", "mail", "Password", "Klejnot", "Nilu").Wait();
-
-            myHub.On<string>("accountCreated", param =>
+            myHub.On<string>("hello", param =>
             {
-                Console.WriteLine(param);
+                Console.WriteLine("" +param +"      :"+DateTime.UtcNow);
             });
 
-            //myHub.Invoke<string>("Hello").Wait();
+            myHub.Invoke<string>("Hello", "Nowa Wiadomość").Wait();
+            myHub.On<string>("hello", param =>
+            {
+                Console.WriteLine("" + param + "      :" + DateTime.UtcNow);
+            });
 
+            myHub.Invoke<string>("singIn", new string[] { "mail", "password", "fristName", "lastName" }).ContinueWith(task=>{
+                if (task.IsFaulted)
+                {
+                    Console.WriteLine("There was an error calling send: {0}",
+                                      task.Exception.GetBaseException());
+                }
+                else
+                {
+                    Console.WriteLine(task.Result);
+                }
+            });
+            {
+                //myHub.Invoke<string>("logIn", new string[] { "login ", "mail" }).ContinueWith(task =>
+                //{
+                //    if (task.IsFaulted)
+                //    {
+                //        Console.WriteLine("There was an error calling send: {0}",
+                //                          task.Exception.GetBaseException());
+                //    }
+                //    else
+                //    {
+                //        Console.WriteLine(task.Result);
+                //    }
+                //});
 
+                //myHub.On<string>("addNewMessageToPage", param =>
+                //{
+                //    Console.WriteLine(param);
+                //});
+                //myHub.Invoke<string>("SignIn", "mail", "Password", "Klejnot", "Nilu").Wait();
+
+                //myHub.On<string>("accountCreated", param =>
+                //{
+                //    Console.WriteLine(param);
+                //});
+
+                //myHub.Invoke<string>("Hello").Wait();
+
+            }
+            
             Console.Read();
             connection.Stop();
         }
