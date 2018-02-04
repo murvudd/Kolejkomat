@@ -15,7 +15,7 @@ namespace ConsoleClient
         {
 
             //Set connection
-            var connection = new HubConnection("http://kolejkomatv1.azurewebsites.net/signalr/hubs");
+            var connection = new HubConnection("http://kolejkomatapp4.azurewebsites.net/signalr/hubs");
             //Make proxy to hub based on hub name on server
             var myHub = connection.CreateHubProxy("mainHub");
             //Start connection
@@ -34,8 +34,8 @@ namespace ConsoleClient
 
             }).Wait();
 
-            
-            
+
+
             myHub.Invoke<string>("hello", "Wiadomość :   " + DateTime.UtcNow).ContinueWith(task =>
             {
                 if (task.IsFaulted)
@@ -51,14 +51,14 @@ namespace ConsoleClient
 
             myHub.On<string>("hello", param =>
             {
-                Console.WriteLine("" +param +"      :"+DateTime.UtcNow);
-            });
-
-            myHub.Invoke<string>("Hello", "Nowa Wiadomość").Wait();
-            myHub.On<string>("hello", param =>
-            {
                 Console.WriteLine("" + param + "      :" + DateTime.UtcNow);
             });
+
+            //myHub.Invoke<string>("Hello", "Nowa Wiadomość").Wait();
+            //myHub.On<string>("hello", param =>
+            //{
+            //    Console.WriteLine("" + param + "      :" + DateTime.UtcNow);
+            //});
 
             myHub.Invoke<string>("singIn", new string[] { "mail", "password", "fristName", "lastName" }).ContinueWith(task=>{
                 if (task.IsFaulted)

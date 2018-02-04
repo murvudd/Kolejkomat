@@ -16,9 +16,6 @@ namespace EntityProject.Models
         public DateTime Date { get; set; }
         public string Issue { get; set; }
 
-       
-
         public virtual ICollection<Person> Persons { get; set; }
-
     }
 }

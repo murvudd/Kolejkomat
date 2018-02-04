@@ -49,7 +49,7 @@ namespace EntityProject
                         Password = password,
                         FirstName = firstName,
                         LastName = lastName,
-                        Privileges = 0,
+                        Privileges = Privileges.User,
                         PositionInQueuePos = null
                     };
 
@@ -213,10 +213,10 @@ namespace EntityProject
         //    //}
         //}
 
-        public void Hello() // funkcja wywoływana przez clienta na serverze
+        public void Hello(string message) // funkcja wywoływana przez clienta na serverze
         {
 
-            Clients.All.hello(); //funkcja wywyoływana przez server na clientcie
+            Clients.All.hello(message); //funkcja wywyoływana przez server na clientcie
         }
     }
 }
