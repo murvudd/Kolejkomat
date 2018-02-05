@@ -43,9 +43,18 @@ namespace EntityProject.Models
 
         public virtual PositionInQueue PositionInQueues { get; set; }
 
-        //public Person()
-        //{
-        //    Id = Guid.NewGuid();
-        //}
+        public Person()
+        {
+        }
+        public Person(string mail, string password, string firstName, string lastName)
+        {
+            Id = Guid.NewGuid();
+            Mail = mail;
+            Password = password;
+            FirstName = firstName;
+            LastName = lastName;
+            Privileges = Privileges.User;
+            PositionInQueuePos = null;
+        }
     }
 }

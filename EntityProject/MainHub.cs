@@ -10,6 +10,40 @@ namespace EntityProject
 {
     public class MainHub : Hub
     {
+        public void SignIn(string mail, string password, string firstName, string lastName)
+        {
+
+            using (DataContext db = new DataContext())
+            {
+                bool f;
+                var result = db.Persons.Where(a => a.Mail == mail).SingleOrDefault();
+                if (result == null)
+                {
+                    Person osoba = new Person(mail, password, firstName, lastName);
+                    //{
+                    //    Id = Guid.NewGuid(),
+                    //    Mail = mail,
+                    //    Password = password,
+                    //    FirstName = firstName,
+                    //    LastName = lastName,
+                    //    Privileges = Privileges.User,
+                    //    PositionInQueuePos = null
+                    //};
+                db.Persons.Add(osoba);
+                db.SaveChanges();
+                Clients.Caller.hello("Succes!");
+                    f = true;
+                    Clients.Caller.accountCreated(f);
+                }
+                else
+                {
+                    f = false;
+                    Clients.Caller.accountCreated(f);
+                    Clients.Caller.hello("Podany mail jest już używany przez kogoś innego");
+                }
+               
+            }
+        }
 
 
         public void LogIn(string mail, string password)
@@ -18,53 +52,22 @@ namespace EntityProject
             using (DataContext db = new DataContext())
             {
 
-                var osoba = db.Persons.SingleOrDefault(a => a.Mail == mail && a.Password == password);
+                var osoba = db.Persons.Where(a => a.Mail == mail && a.Password == password).SingleOrDefault();
                 if (osoba != null)
                 {
                     f = true;
-                    Clients.Caller.loggedIn(f, osoba.Id);
+                    Clients.Caller.loggedIn(osoba.Id, f);
+                    Clients.Caller.hello("" + osoba.Id);
                 }
                 else
                 {
                     f = false;
-                    Clients.Caller.loginError(f, osoba.Id); // tu jak osoba będzie nullem to nie wiem czy się nie wysypie
-                    // sprawdzę to
+                    Clients.Caller.loginError(f); 
+                    //to niepowinno się wysypać
                 }
             }
         }
 
-        public void SignIn(string mail, string password, string firstName, string lastName)
-        {
-
-            using (DataContext db = new DataContext())
-            {
-                bool f;
-                var result = db.Persons.SingleOrDefault(a => a.Mail == mail);
-                if (result == null)
-                {
-                    Person osoba = new Person()
-                    {
-                        Id = Guid.NewGuid(),
-                        Mail = mail,
-                        Password = password,
-                        FirstName = firstName,
-                        LastName = lastName,
-                        Privileges = Privileges.User,
-                        PositionInQueuePos = null
-                    };
-
-                    db.Persons.Add(osoba);
-                    db.SaveChanges();
-                    f = true;
-                    Clients.Caller.accountCreated(f);
-                }
-                else
-                {
-                    f = false;
-                    Clients.Caller.accountCreated(f);
-                }
-            }
-        }
 
 
 
@@ -75,19 +78,20 @@ namespace EntityProject
 
             using (var context = new DataContext())
             {
-                var user = context.Persons.SingleOrDefault(b => b.Id == Id);
+                var user = context.Persons.Where(b => b.Id == Id).SingleOrDefault();
 
-                var queue = context.PositionInQueues.SingleOrDefault(c => c.Pos == user.PositionInQueuePos);
+                var pos = context.PositionInQueues.Where(c => c.Pos == user.PositionInQueuePos).SingleOrDefault();
 
-                var queue2 = context.PositionInQueues.Where(c => c.Date < queue.Date).Count();
+                var count = context.PositionInQueues.Where(c => c.Date < pos.Date).Count();
 
                 //var queue2 = context.PositionInQueues.Where(c => c.Date < queue.Date);
 
                 //var queue3 = queue2.Count();
 
-                estimateTime = DateTime.Now.AddMinutes(queue2 * ESTIMATETIMEFORPERSON).ToString("HH:mm");
+                estimateTime = DateTime.Now.AddMinutes(count * ESTIMATETIMEFORPERSON).ToString("HH:mm");
             }
-            Clients.Caller.timeEstimattion(estimateTime);
+            Clients.Caller.timeEstimation(estimateTime);
+            //Clients.Caller.hello(estimateTime);
         }
 
         public void AddUserToQueue(Guid Id, string issue)
@@ -99,7 +103,7 @@ namespace EntityProject
                 context.PositionInQueues.Add(entryq);
                 context.SaveChanges();
 
-                var result = context.Persons.SingleOrDefault(b => b.Id == Id);
+                var result = context.Persons.Where(b => b.Id == Id).SingleOrDefault();
                 if (result != null)
                 {
                     result.PositionInQueuePos = entryq.Pos;
