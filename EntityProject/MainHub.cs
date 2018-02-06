@@ -29,9 +29,9 @@ namespace EntityProject
                     //    Privileges = Privileges.User,
                     //    PositionInQueuePos = null
                     //};
-                db.Persons.Add(osoba);
-                db.SaveChanges();
-                Clients.Caller.hello("Succes!");
+                    db.Persons.Add(osoba);
+                    db.SaveChanges();
+                    Clients.Caller.hello("Succes!");
                     f = true;
                     Clients.Caller.accountCreated(f);
                 }
@@ -41,10 +41,9 @@ namespace EntityProject
                     Clients.Caller.accountCreated(f);
                     Clients.Caller.hello("Podany mail jest już używany przez kogoś innego");
                 }
-               
+
             }
         }
-
 
         public void LogIn(string mail, string password)
         {
@@ -62,57 +61,70 @@ namespace EntityProject
                 else
                 {
                     f = false;
-                    Clients.Caller.loginError(f); 
+                    Clients.Caller.loginError(f);
                     //to niepowinno się wysypać
                 }
             }
         }
 
-
-
-
         public void EstimateTime(Guid Id)
         {
-            int ESTIMATETIMEFORPERSON = 10;
+            int ESTIMATETIMEFORPERSON = 5;
             string estimateTime;
 
             using (var context = new DataContext())
             {
                 var user = context.Persons.Where(b => b.Id == Id).SingleOrDefault();
+                if (user != null)
+                {
+                    var pos = context.PositionInQueues.Where(c => c.Pos == user.PositionInQueuePos).SingleOrDefault();
 
-                var pos = context.PositionInQueues.Where(c => c.Pos == user.PositionInQueuePos).SingleOrDefault();
+                    var count = context.PositionInQueues.Where(c => c.Date < pos.Date).Count();
 
-                var count = context.PositionInQueues.Where(c => c.Date < pos.Date).Count();
+                    //var queue2 = context.PositionInQueues.Where(c => c.Date < queue.Date);
 
-                //var queue2 = context.PositionInQueues.Where(c => c.Date < queue.Date);
+                    //var queue3 = queue2.Count();
 
-                //var queue3 = queue2.Count();
+                    //estimateTime = DateTime.Now.AddMinutes(count * ESTIMATETIMEFORPERSON).ToString();
+                    estimateTime = DateTime.UtcNow.AddMinutes(count * ESTIMATETIMEFORPERSON).ToString("HH:mm");
+                    Clients.Caller.timeEstimation(estimateTime);
+                    //Clients.Caller.hello(DateTime.UtcNow, count);
+                }
+                else
+                {
+                    var count = context.PositionInQueues.Count();
+                    estimateTime = DateTime.UtcNow.AddMinutes(count * ESTIMATETIMEFORPERSON).ToString("HH:mm");
+                    // można sprawdzać czas oczekiwania bez posiadania konta
 
-                estimateTime = DateTime.Now.AddMinutes(count * ESTIMATETIMEFORPERSON).ToString("HH:mm");
+                }
             }
-            Clients.Caller.timeEstimation(estimateTime);
-            //Clients.Caller.hello(estimateTime);
         }
 
         public void AddUserToQueue(Guid Id, string issue)
         {
             using (var context = new DataContext())
             {
-
-                var entryq = new PositionInQueue { Date = DateTime.Now, Issue = issue };
-                context.PositionInQueues.Add(entryq);
-                context.SaveChanges();
-
-                var result = context.Persons.Where(b => b.Id == Id).SingleOrDefault();
-                if (result != null)
+                var qposition = new PositionInQueue { Date = DateTime.Now, Issue = issue };
+                var person = context.Persons.SingleOrDefault(b => b.Id == Id);
+                var result = context.PositionInQueues.Where(b => b == person.PositionInQueues).SingleOrDefault();
+                //Clients.Caller.hello("testestest");
+                if (person != null || result == null)
                 {
-                    result.PositionInQueuePos = entryq.Pos;
+                    context.PositionInQueues.Add(qposition);
+                    context.SaveChanges();
+                    person.PositionInQueuePos = qposition.Pos;
 
                     context.SaveChanges();
+                    Clients.Caller.userAdded(); // TimeEstimation, update queue
+                    Clients.Others.newUseradded();// update queue
+                    
+
+                }
+                else
+                {
+                    Clients.Caller.hello("Nie można dodać");
                 }
 
-                Clients.Caller.userAdded();
-                Clients.Others.newUseradded();
             }
         }
 
