@@ -55,6 +55,10 @@ namespace ConsoleClient
             Console.WriteLine("id powino byc: {0}", osoba.Id);
             //ToQueue(osoba.Id, "i have a bad feeling about this", osoba, myHub);
             TimeEstimation(osoba.Id, osoba, myHub);
+            SendQueue(myHub);
+                //DeleteUser(osoba.Id, osoba, myHub);
+                //ToQueue(osoba.Id, "i have a bad feeling about this", osoba, myHub);
+                //TimeEstimation(osoba.Id, osoba, myHub);
 
             //myHub.Invoke<string>("Hello").Wait();
             Console.ReadLine();
@@ -196,6 +200,28 @@ namespace ConsoleClient
                 Console.WriteLine(e);
                 throw;
             }
+        }
+
+        static void SendQueue(IHubProxy hub)
+        {
+            hub.Invoke("SendQueue").ContinueWith(task =>
+            {
+                if (task.IsFaulted)
+                {
+                    Console.WriteLine("There was an error: {0}", task.Exception.GetBaseException());
+                    throw (task.Exception.GetBaseException());
+                }
+                else
+                {
+                    //Console.WriteLine(task.Result);
+                    Console.WriteLine("Sending Queue ...");
+                }
+            });
+
+            hub.On<string>("hello", param =>
+            {
+                Console.WriteLine("hello time estimation:        {0}      count", param);
+            });
         }
 
         static void DeleteUser(Guid id, Person osoba, IHubProxy hub)

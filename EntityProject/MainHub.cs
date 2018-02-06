@@ -75,9 +75,10 @@ namespace EntityProject
             using (var context = new DataContext())
             {
                 var user = context.Persons.Where(b => b.Id == Id).SingleOrDefault();
-                if (user != null)
+                //var pozycja = context.PositionInQueues.SingleOrDefault(a=> s == user);
+                var pos = context.PositionInQueues.Where(c => c.Pos == user.PositionInQueuePos).SingleOrDefault();
+                if (user != null && pos != null)
                 {
-                    var pos = context.PositionInQueues.Where(c => c.Pos == user.PositionInQueuePos).SingleOrDefault();
 
                     var count = context.PositionInQueues.Where(c => c.Date < pos.Date).Count();
 
@@ -94,6 +95,7 @@ namespace EntityProject
                 {
                     var count = context.PositionInQueues.Count();
                     estimateTime = DateTime.UtcNow.AddMinutes(count * ESTIMATETIMEFORPERSON).ToString("HH:mm");
+                    Clients.Caller.timeEstimation(estimateTime);
                     // można sprawdzać czas oczekiwania bez posiadania konta
 
                 }
@@ -117,7 +119,7 @@ namespace EntityProject
                     context.SaveChanges();
                     Clients.Caller.userAdded(); // TimeEstimation, update queue
                     Clients.Others.newUseradded();// update queue
-                    
+
 
                 }
                 else
@@ -147,7 +149,17 @@ namespace EntityProject
 
         public void SendQueue()
         {
+            using (var context = new DataContext())
+            {
+                var count = context.PositionInQueues.Count();
+                Clients.Caller.hello("Count:    "+count);
+                foreach (var e in context.PositionInQueues)
+                {
+                    Clients.Caller.hello(e.Date);
+                }
 
+
+            }
             Clients.All.updateQueue();
         }
 
