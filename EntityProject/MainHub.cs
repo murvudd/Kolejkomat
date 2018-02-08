@@ -130,15 +130,20 @@ namespace EntityProject
             }
         }
 
-        public void HeardIt(Metronome m, EventArgs e)
-        {
-            System.Console.WriteLine("HEARD IT");
-        }
+        //public void HeardIt(Metronome m, EventArgs e)
+        //{
+        //    System.Console.WriteLine("HEARD IT");
+        //}
 
-        public void ItsTime()
-        {
-
-        }
+        //public void IsItTime(Guid id)
+        //{
+        //    using (var db = new DataContext())
+        //    {
+                
+        //        db.PositionInQueues.SingleOrDefault(b=>b.Persons == );
+        //        Clients.All.youreNext(id);
+        //    }
+        //}
         
         //public void SendQueue()
         //{

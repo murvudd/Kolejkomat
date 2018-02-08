@@ -8,10 +8,14 @@ using System.Web;
 using System.Web.Mvc;
 using EntityProject.DAL;
 using EntityProject.Models;
+using Microsoft.AspNet.SignalR.Client;
+
 namespace EntityProject.Controllers
 {
     public class PositionInQueuesController : Controller
     {
+
+
         private DataContext db = new DataContext();
         // GET: PositionInQueues
         public ActionResult Index()
@@ -108,8 +112,25 @@ namespace EntityProject.Controllers
             PositionInQueue positionInQueue = db.PositionInQueues.Find(id);
             db.PositionInQueues.Remove(positionInQueue);
             db.SaveChanges();
-            
-            
+            var connection = new HubConnection("http://kolejkomatapp4.azurewebsites.net/signalr/hubs");
+            var myHub = connection.CreateHubProxy("mainHub");
+            connection.Start().ContinueWith(task =>
+            {
+                if (task.IsFaulted)
+                {
+                    Console.WriteLine("There was an error opening the connection:{0}",
+                                  task.Exception.GetBaseException());
+                }
+                else
+                {
+                    Console.WriteLine("Connected");
+                }
+
+            }).Wait();
+            myHub.Invoke<string>("hello", "WITAM z controllera delete, usunieto!").Wait();
+
+            connection.Stop();
+
             return RedirectToAction("Index");
         }
         protected override void Dispose(bool disposing)

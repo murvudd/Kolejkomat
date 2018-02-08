@@ -110,6 +110,21 @@ namespace ConsoleClient
                 }
             });
         }
+        static void Hello(string message, IHubProxy hub)
+        {
+            hub.Invoke<string>("Hello", message).ContinueWith(task =>
+            {
+                if (task.IsFaulted)
+                {
+                    Console.WriteLine("Bład w invokowaniu f. Hello: {0}", task.Exception.GetBaseException());
+                    throw (task.Exception.GetBaseException());
+                }
+                else
+                {
+                    Console.WriteLine(task.Result);
+                }
+            });
+        }
 
         static void Main(string[] args)
         {
@@ -181,7 +196,7 @@ namespace ConsoleClient
                     }
 
                 }).Wait();
-
+            Hello("Witam all z Clienta", myHub);
             LogIn("han@solo.com", "hansolo", myHub);
             Console.ReadLine();
             //Console.WriteLine("id powino byc: {0}", osoba.Id);
