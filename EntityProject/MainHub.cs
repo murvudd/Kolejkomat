@@ -130,6 +130,11 @@ namespace EntityProject
             }
         }
 
+        public void HeardIt(Metronome m, EventArgs e)
+        {
+            System.Console.WriteLine("HEARD IT");
+        }
+
         public void ItsTime()
         {
 
