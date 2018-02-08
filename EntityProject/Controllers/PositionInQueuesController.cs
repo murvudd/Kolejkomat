@@ -111,6 +111,9 @@ namespace EntityProject.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            Person persons = db.Persons.SingleOrDefault(b => b.PositionInQueuePos == id);
+            persons.PositionInQueuePos = null;
+
             PositionInQueue positionInQueue = db.PositionInQueues.Find(id);
             db.PositionInQueues.Remove(positionInQueue);
             db.SaveChanges();

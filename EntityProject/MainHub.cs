@@ -56,7 +56,7 @@ namespace EntityProject
                 {
                     f = true;
                     Clients.Caller.loggedIn(osoba.Id, f);
-                    Clients.Caller.hello("" + osoba.Id);
+                    Clients.Caller.hello("hello z loginu:  " + osoba.Id);
                 }
                 else
                 {
@@ -109,7 +109,8 @@ namespace EntityProject
                 var qposition = new PositionInQueue { Date = DateTime.Now, Issue = issue };
                 var person = context.Persons.SingleOrDefault(b => b.Id == Id);
                 var result = context.PositionInQueues.Where(b => b == person.PositionInQueues).SingleOrDefault();
-                //Clients.Caller.hello("testestest");
+                Clients.Caller.hello("test hello");
+                
                 if (person != null || result == null)
                 {
                     context.PositionInQueues.Add(qposition);
@@ -120,6 +121,11 @@ namespace EntityProject
                     Clients.Caller.userAdded(); // TimeEstimation, update queue
                     Clients.Others.newUseradded();// update queue
 
+                    //int ESTIMATETIMEFORPERSON = 5;
+                    //string estimateTime;
+                    //var count = context.PositionInQueues.Where(c => c.Date < result.Date).Count();
+                    //estimateTime = DateTime.UtcNow.AddMinutes(count * ESTIMATETIMEFORPERSON).ToString("HH:mm");
+                    //Clients.Caller.timeEstimation(estimateTime);
 
                 }
                 else
@@ -136,15 +142,20 @@ namespace EntityProject
             {
                 var UserIdInQueue = context.Persons.SingleOrDefault(b => b.Id == Id);
                 var itemToRemove = context.PositionInQueues.SingleOrDefault(x => x.Pos == UserIdInQueue.PositionInQueuePos);
-
+                
                 if (itemToRemove != null)
                 {
                     context.PositionInQueues.Remove(itemToRemove);
 
                     context.SaveChanges();
+                    Clients.Caller.removedFromQueue();
+                    Clients.Caller.hello("usunieto:  "+UserIdInQueue.FirstName+"    "+UserIdInQueue.LastName);
+                }
+                else
+                {
+                    Clients.Caller.hello("nie usunieto");
                 }
             }
-            Clients.Caller.removedFromQueue();
         }
 
         public void SendQueue()
@@ -152,7 +163,7 @@ namespace EntityProject
             using (var context = new DataContext())
             {
                 var count = context.PositionInQueues.Count();
-                Clients.Caller.hello("Count:    "+count);
+                Clients.Caller.hello("Count:    " + count);
                 foreach (var e in context.PositionInQueues)
                 {
                     Clients.Caller.hello(e.Date);
