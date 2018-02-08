@@ -16,7 +16,7 @@ namespace EntityProject
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "PositionInQueues", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

@@ -127,7 +127,7 @@ namespace EntityProject.Controllers
                 }
 
             }).Wait();
-            myHub.Invoke<string>("hello", "WITAM z controllera delete, usunieto!").Wait();
+            myHub.Invoke("checkIfLast").Wait();
 
             connection.Stop();
 

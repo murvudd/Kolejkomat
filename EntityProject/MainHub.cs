@@ -91,8 +91,8 @@ namespace EntityProject
                     person.PositionInQueuePos = qposition.Pos;
                     context.SaveChanges();
 
-                    Clients.Caller.userAdded(true); 
-                    
+                    Clients.Caller.userAdded(true);
+
 
                     int ESTIMATETIMEFORPERSON = 5;
                     string estimateTime;
@@ -130,6 +130,17 @@ namespace EntityProject
             }
         }
 
+        public void CheckIfLast()
+        {
+            using (var db = new DataContext())
+            {
+                var list = db.Persons.OrderBy(person => person.PositionInQueuePos != null).ToList();
+                var sortedPersons = list.LastOrDefault();
+                if (sortedPersons != null) Clients.All.itsURTime(sortedPersons.Id);
+                else Clients.All.hello("it's not your time");
+            }
+        }
+
         //public void HeardIt(Metronome m, EventArgs e)
         //{
         //    System.Console.WriteLine("HEARD IT");
@@ -139,12 +150,12 @@ namespace EntityProject
         //{
         //    using (var db = new DataContext())
         //    {
-                
+
         //        db.PositionInQueues.SingleOrDefault(b=>b.Persons == );
         //        Clients.All.youreNext(id);
         //    }
         //}
-        
+
         //public void SendQueue()
         //{
         //    using (var context = new DataContext())
@@ -160,7 +171,7 @@ namespace EntityProject
         //    }
         //    Clients.All.updateQueue();
         //}
-        
+
 
         public void Hello(string message) // funkcja wywoływana przez clienta na serverze
         {
