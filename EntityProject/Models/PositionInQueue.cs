@@ -17,5 +17,7 @@ namespace EntityProject.Models
         public string Issue { get; set; }
 
         public virtual ICollection<Person> Persons { get; set; }
+        
+
     }
 }

@@ -108,6 +108,8 @@ namespace EntityProject.Controllers
             PositionInQueue positionInQueue = db.PositionInQueues.Find(id);
             db.PositionInQueues.Remove(positionInQueue);
             db.SaveChanges();
+            
+            
             return RedirectToAction("Index");
         }
         protected override void Dispose(bool disposing)
@@ -119,4 +121,20 @@ namespace EntityProject.Controllers
             base.Dispose(disposing);
         }
     }
+
+    //TestClass t = new TestClass();
+    //t.Check();
+
+
+    //public class TestClass
+    //{
+    //    public event LastHandler Last;
+    //    public EventArgs e = null;
+    //    public delegate void LastHandler(TestClass m, EventArgs e);
+    //    public void Check()
+    //    {
+    //        Last?.Invoke(this, e);
+    //    }
+
+    //}
 }
