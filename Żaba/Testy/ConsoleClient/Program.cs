@@ -18,7 +18,7 @@ namespace ConsoleClient
             {
                 if (task.IsFaulted)
                 {
-                    Console.WriteLine("There was an error: {0}", task.Exception.GetBaseException());
+                    Console.WriteLine("Błąd w rejestracji: {0}", task.Exception.GetBaseException());
                     throw (task.Exception.GetBaseException());
                 }
                 else
@@ -34,7 +34,7 @@ namespace ConsoleClient
             {
                 if (task.IsFaulted)
                 {
-                    Console.WriteLine("There was an error: {0}", task.Exception.GetBaseException());
+                    Console.WriteLine("Błąd w logowaniu: {0}", task.Exception.GetBaseException());
                     throw (task.Exception.GetBaseException());
                 }
                 else
@@ -50,7 +50,7 @@ namespace ConsoleClient
             {
                 if (task.IsFaulted)
                 {
-                    Console.WriteLine("There was an error: {0}", task.Exception.GetBaseException());
+                    Console.WriteLine("Błąd w dodawaniu do kolejki: {0}", task.Exception.GetBaseException());
                     //throw (task.Exception.GetBaseException());
                 }
                 else
@@ -65,7 +65,7 @@ namespace ConsoleClient
             {
                 if (task.IsFaulted)
                 {
-                    Console.WriteLine("There was an error: {0}", task.Exception.GetBaseException());
+                    Console.WriteLine("Błąd w timeEstimation: {0}", task.Exception.GetBaseException());
                     throw (task.Exception.GetBaseException());
                 }
                 else
@@ -101,7 +101,7 @@ namespace ConsoleClient
             {
                 if (task.IsFaulted)
                 {
-                    Console.WriteLine("There was an error: {0}", task.Exception.GetBaseException());
+                    Console.WriteLine("Bład w usuwaniu z kolejki: {0}", task.Exception.GetBaseException());
                     throw (task.Exception.GetBaseException());
                 }
                 else
@@ -121,7 +121,7 @@ namespace ConsoleClient
             var myHub = connection.CreateHubProxy("mainHub");
             myHub.On<string>("hello", s1 =>
             {
-                Console.WriteLine("param: {0}      type:{1}", s1, s1.GetType());
+                Console.WriteLine("hello: {0}", s1);
             });
             myHub.On<string>("accountCreated", param =>
             {
@@ -133,8 +133,8 @@ namespace ConsoleClient
 
                 //osoba.Id = Guid.Empty;
                 osoba.Id = Guid.Parse(s1);
-                Console.WriteLine("id :{0}      typ{1}", s1, s1.GetType());
-                Console.WriteLine("id :{0}", osoba.Id);
+                //Console.WriteLine("id :{0}      typ{1}", s1, s1.GetType());
+                Console.WriteLine("logged in, id :{0}", osoba.Id);
 
 
             });
@@ -144,7 +144,27 @@ namespace ConsoleClient
             });
             myHub.On<string, string>("hello", (param, param2) =>
             {
-                Console.WriteLine("param, param:        {0}      count: {1}", param, param2);
+                Console.WriteLine("hello param, param:        {0}      param2: {1}", param, param2);
+            });
+            myHub.On<string>("userAdded", param =>
+            {
+                Console.WriteLine("dodano do kolejki:        {0}", param);
+                //if (param == "True")
+                //{
+
+                //    myHub.Invoke<string>("estimateTime", osoba.Id.ToString()).ContinueWith(task =>
+                //    {
+                //        if (task.IsFaulted)
+                //        {
+                //            Console.WriteLine("Błąd w timeEstimation: {0}", task.Exception.GetBaseException());
+                //            throw (task.Exception.GetBaseException());
+                //        }
+                //        else
+                //        {
+                //            Console.WriteLine(task.Result);
+                //        }
+                //    });
+                //}
             });
 
             //Start connection
@@ -162,18 +182,17 @@ namespace ConsoleClient
 
                 }).Wait();
 
-            Thread.Sleep(5000);
             LogIn("han@solo.com", "hansolo", myHub);
             Console.ReadLine();
-            Console.WriteLine("id powino byc: {0}", osoba.Id);
+            //Console.WriteLine("id powino byc: {0}", osoba.Id);
 
             ToQueue(osoba.Id, "dodano z clienta, bad feeling", myHub);
-            //Thread.Sleep(5000);
             //DeleteUser(osoba.Id, myHub);
 
 
 
-            Console.WriteLine("id powino byc: {0}", osoba.Id);
+            //Thread.Sleep(5000);
+
             {
                 //SignIn("nowy.ziomek@gmail.com", "haslo1", "nowy", "ziomek", myHub);
                 //myHub.On<string>("accountCreated", param =>
@@ -202,6 +221,7 @@ namespace ConsoleClient
 
                 //myHub.Invoke<string>("Hello").Wait();
             }
+
             Console.ReadLine();
             connection.Stop();
 
@@ -229,7 +249,7 @@ namespace ConsoleClient
             //connection.Stop();
         }
 
-        
+
 
         //static void SignIn(string email, string password, string firstName, string lastName, Person osoba, IHubProxy hub)
         //{
@@ -254,7 +274,7 @@ namespace ConsoleClient
 
 
 
-        
+
 
         //static void LogIn(string email, string password, Person prsn, IHubProxy hub)
         //{
@@ -294,7 +314,7 @@ namespace ConsoleClient
 
 
 
-        
+
 
         //static void ToQueue(Guid id, string issue, Person osoba, IHubProxy hub)
         //{
@@ -342,7 +362,7 @@ namespace ConsoleClient
 
 
 
-        
+
 
         //static void TimeEstimation(Guid id, Person osoba, IHubProxy hub)
         //{
@@ -381,7 +401,7 @@ namespace ConsoleClient
 
 
 
-        
+
 
         //static void DeleteUser(Guid id, Person osoba, IHubProxy hub)
         //{

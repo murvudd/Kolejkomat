@@ -15,7 +15,6 @@ namespace EntityProject
 
             using (DataContext db = new DataContext())
             {
-                bool f;
                 var result = db.Persons.Where(a => a.Mail == mail).SingleOrDefault();
                 if (result == null)
                 {
@@ -31,14 +30,12 @@ namespace EntityProject
                     //};
                     db.Persons.Add(osoba);
                     db.SaveChanges();
-                    Clients.Caller.hello("Succes!");
-                    f = true;
-                    Clients.Caller.accountCreated(f);
+                    Clients.Caller.hello("successful sign in");
+                    Clients.Caller.accountCreated(true);
                 }
                 else
                 {
-                    f = false;
-                    Clients.Caller.accountCreated(f);
+                    Clients.Caller.accountCreated(false);
                     Clients.Caller.hello("Podany mail jest już używany przez kogoś innego");
                 }
 
@@ -47,21 +44,17 @@ namespace EntityProject
 
         public void LogIn(string mail, string password)
         {
-            bool f;
             using (DataContext db = new DataContext())
             {
 
                 var osoba = db.Persons.Where(a => a.Mail == mail && a.Password == password).SingleOrDefault();
                 if (osoba != null)
                 {
-                    f = true;
-                    Clients.Caller.loggedIn(osoba.Id, f);
-                    Clients.Caller.hello("hello z loginu:  " + osoba.Id);
+                    Clients.Caller.loggedIn(osoba.Id, true);
                 }
                 else
                 {
-                    f = false;
-                    Clients.Caller.loginError(f);
+                    Clients.Caller.loginError(false);
                     //to niepowinno się wysypać
                 }
             }
@@ -79,17 +72,12 @@ namespace EntityProject
                 var pos = context.PositionInQueues.Where(c => c.Pos == user.PositionInQueuePos).SingleOrDefault();
                 if (user != null && pos != null)
                 {
-
-                    var count = context.PositionInQueues.Where(c => c.Date < pos.Date).Count();
-
                     //var queue2 = context.PositionInQueues.Where(c => c.Date < queue.Date);
-
                     //var queue3 = queue2.Count();
-
                     //estimateTime = DateTime.Now.AddMinutes(count * ESTIMATETIMEFORPERSON).ToString();
+                    var count = context.PositionInQueues.Where(c => c.Date < pos.Date).Count();
                     estimateTime = DateTime.UtcNow.AddMinutes(count * ESTIMATETIMEFORPERSON).ToString("HH:mm");
                     Clients.Caller.timeEstimation(estimateTime);
-                    //Clients.Caller.hello(DateTime.UtcNow, count);
                 }
                 else
                 {
@@ -97,7 +85,6 @@ namespace EntityProject
                     estimateTime = DateTime.UtcNow.AddMinutes(count * ESTIMATETIMEFORPERSON).ToString("HH:mm");
                     Clients.Caller.timeEstimation(estimateTime);
                     // można sprawdzać czas oczekiwania bez posiadania konta
-
                 }
             }
         }
@@ -106,33 +93,35 @@ namespace EntityProject
         {
             using (var context = new DataContext())
             {
-                var qposition = new PositionInQueue { Date = DateTime.Now, Issue = issue };
                 var person = context.Persons.SingleOrDefault(b => b.Id == Id);
-                var result = context.PositionInQueues.Where(b => b == person.PositionInQueues).SingleOrDefault();
-                Clients.Caller.hello("test hello");
-                
-                if (person != null || result == null)
+                var result = context.PositionInQueues.SingleOrDefault(b => b.Pos == person.PositionInQueuePos);
+                //var result = context.PositionInQueues.SingleOrDefault(b => b == person.PositionInQueues);
+                //Clients.All.hello(result == null);
+
+                if (result == null)
                 {
+                    var qposition = new PositionInQueue { Date = DateTime.Now, Issue = issue };
                     context.PositionInQueues.Add(qposition);
                     context.SaveChanges();
+
                     person.PositionInQueuePos = qposition.Pos;
-
                     context.SaveChanges();
-                    Clients.Caller.userAdded(); // TimeEstimation, update queue
-                    Clients.Others.newUseradded();// update queue
 
-                    //int ESTIMATETIMEFORPERSON = 5;
-                    //string estimateTime;
-                    //var count = context.PositionInQueues.Where(c => c.Date < result.Date).Count();
-                    //estimateTime = DateTime.UtcNow.AddMinutes(count * ESTIMATETIMEFORPERSON).ToString("HH:mm");
-                    //Clients.Caller.timeEstimation(estimateTime);
+                    Clients.Caller.userAdded(true); // TimeEstimation, update queue
+                    //Clients.Others.newUseradded();// update queue
+
+                    int ESTIMATETIMEFORPERSON = 5;
+                    string estimateTime;
+                    var count = context.PositionInQueues.Where(c => c.Date < qposition.Date).Count();
+                    estimateTime = DateTime.UtcNow.AddMinutes(count * ESTIMATETIMEFORPERSON).ToString("HH:mm");
+                    Clients.Caller.timeEstimation(estimateTime);
 
                 }
                 else
                 {
-                    Clients.Caller.hello("Nie można dodać");
+                    Clients.Caller.userAdded(false);
+                    //Clients.Caller.hello("hello z addUserToQue:   Nie można dodać");
                 }
-
             }
         }
 
@@ -142,37 +131,37 @@ namespace EntityProject
             {
                 var UserIdInQueue = context.Persons.SingleOrDefault(b => b.Id == Id);
                 var itemToRemove = context.PositionInQueues.SingleOrDefault(x => x.Pos == UserIdInQueue.PositionInQueuePos);
-                
+
                 if (itemToRemove != null)
                 {
                     context.PositionInQueues.Remove(itemToRemove);
 
                     context.SaveChanges();
                     Clients.Caller.removedFromQueue();
-                    Clients.Caller.hello("usunieto:  "+UserIdInQueue.FirstName+"    "+UserIdInQueue.LastName);
+                    Clients.Caller.hello("usunieto z kolejki:  " + UserIdInQueue.FirstName + "    " + UserIdInQueue.LastName);
                 }
                 else
                 {
-                    Clients.Caller.hello("nie usunieto");
+                    Clients.Caller.hello("nie usunieto z kolejki ");
                 }
             }
         }
 
-        public void SendQueue()
-        {
-            using (var context = new DataContext())
-            {
-                var count = context.PositionInQueues.Count();
-                Clients.Caller.hello("Count:    " + count);
-                foreach (var e in context.PositionInQueues)
-                {
-                    Clients.Caller.hello(e.Date);
-                }
+        //public void SendQueue()
+        //{
+        //    using (var context = new DataContext())
+        //    {
+        //        var count = context.PositionInQueues.Count();
+        //        Clients.Caller.hello("Count:    " + count);
+        //        foreach (var e in context.PositionInQueues)
+        //        {
+        //            Clients.Caller.hello(e.Date);
+        //        }
 
 
-            }
-            Clients.All.updateQueue();
-        }
+        //    }
+        //    Clients.All.updateQueue();
+        //}
 
         //public string CheckTimesEstimation()
         //{
@@ -252,10 +241,10 @@ namespace EntityProject
         //    //}
         //}
 
-        public void Hello(string message) // funkcja wywoływana przez clienta na serverze
-        {
+        //public void Hello(string message) // funkcja wywoływana przez clienta na serverze
+        //{
 
-            Clients.All.hello(message); //funkcja wywyoływana przez server na clientcie
-        }
+        //    Clients.All.hello(message); //funkcja wywyoływana przez server na clientcie
+        //}
     }
 }

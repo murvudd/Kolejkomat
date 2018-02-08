@@ -1,34 +1,77 @@
-﻿@model EntityProject.Models.PositionInQueue
+﻿@using EntityProject.Models;
+
+@model Tuple<PositionInQueue, Person>
+
 
 @{
+
     ViewBag.Title = "Details";
 }
 
+
 <h2>Details</h2>
 
+
 <div>
+
     <h4>PositionInQueue</h4>
+
     <hr />
+
     <dl class="dl-horizontal">
+
         <dt>
-            @Html.DisplayNameFor(model => model.Date)
+
+            Imię i Nazwisko
+
         </dt>
 
+
         <dd>
-            @Html.DisplayFor(model => model.Date)
+
+            @Html.DisplayFor(model => model.Item2.FirstName)
+
+            @Html.DisplayFor(model => model.Item2.LastName)
+
+
+
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Issue)
+
+            Powód wizyty
+
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Issue)
+
+
+
+            @Html.DisplayFor(model => model.Item1.Issue)
+
         </dd>
+
+        <dt>
+
+            Data wejscia do kolejki
+
+        </dt>
+
+
+        <dd>
+
+            @Html.DisplayFor(model => model.Item1.Date)
+
+        </dd>
+
+        @Html.ActionLink("Delete", "Delete", new { id = Model.Item1.Pos })
 
     </dl>
+
 </div>
+
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Pos }) |
-    @Html.ActionLink("Back to List", "Index")
+
+
 </p>
+

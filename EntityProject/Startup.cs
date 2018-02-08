@@ -5,7 +5,7 @@ using System.Web;
 using Microsoft.Owin;
 using Owin;
 using System.Net;
-
+using Microsoft.AspNet.SignalR;
 
 [assembly: OwinStartup(typeof(EntityProject.Startup))]
 namespace EntityProject
@@ -14,7 +14,11 @@ namespace EntityProject
     {
         public void Configuration(IAppBuilder app)
         {
-            app.MapSignalR();
+            var hubConfiguration = new HubConfiguration
+            {
+                EnableDetailedErrors = true
+            };
+            app.MapSignalR(hubConfiguration);
         }
 
         public void GetMyIpAddress()

@@ -1,39 +1,54 @@
 ﻿@model IEnumerable<EntityProject.Models.PositionInQueue>
 
+
 @{
+
     ViewBag.Title = "Index";
 }
 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <h2>Index</h2>
 
+
 <p>
+
     @Html.ActionLink("Create New", "Create")
+
 </p>
+
 <table class="table">
+
     <tr>
+
         <th>
+
             @Html.DisplayNameFor(model => model.Date)
+
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Issue)
-        </th>
-        <th></th>
+
+
+
+
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Date)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Issue)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Pos }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Pos }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Pos })
-        </td>
-    </tr>
+
+    @foreach (var item in Model)
+
+    {
+
+<tr>
+
+    <td>
+
+        <button type="button" onclick="location.href='@Url.Action("Details","PositionInQueues",new { id = item.Pos })'">@Html.DisplayFor(modelItem => item.Date)</button>
+
+
+    </td>
+
+</tr>
+
 }
+
 
 </table>
