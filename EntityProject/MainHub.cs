@@ -92,7 +92,7 @@ namespace EntityProject
                     context.SaveChanges();
 
                     Clients.Caller.userAdded(true); 
-                    //Clients.Others.newUseradded();// update queue
+                    
 
                     int ESTIMATETIMEFORPERSON = 5;
                     string estimateTime;
@@ -130,6 +130,11 @@ namespace EntityProject
             }
         }
 
+        public void ItsTime()
+        {
+
+        }
+        
         //public void SendQueue()
         //{
         //    using (var context = new DataContext())
